@@ -1,0 +1,13 @@
+[Unit]
+Description=CCS A2I daemon
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=always
+ExecStart=/srv/ccs-a2id/ccs-a2id
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
