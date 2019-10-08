@@ -50,9 +50,9 @@ $_CFG['X_SEND_TRIES_INTVL'] = 1;              // интервал (сек) ме�
 
 // Настройки TTS
 $_CFG['tts'] =  [
-    'external-root' => '//dcvreg/cc_records/tts',
-    'internal-root' => '/cc_records/tts',
-    'rec-dir-with-date' => true, // add date dirs to root, ex. /cc_records/tts/2018/08/28
+    'external-root' => '//dcvreg/cc__records/tts',
+    'internal-root' => '/recordings/tts',
+    'rec-dir-with-date' => true, // add date dirs to root, ex. /recordings/tts/2018/08/28
     'lang' => 'ru-RU',
     'voice' => 'zahar',
     'speed' => '0.7',
