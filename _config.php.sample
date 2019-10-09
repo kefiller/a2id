@@ -55,7 +55,7 @@ $_CFG['tts'] =  [
     'rec-dir-with-date' => true, // add date dirs to root, ex. /recordings/tts/2018/08/28
     'lang' => 'ru-RU',
     'voice' => 'zahar',
-    'speed' => '0.7',
+    'speed' => '0.9',
     'emotion' => 'evil',
 ];
 
