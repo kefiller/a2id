@@ -1,7 +1,7 @@
 <?php
 
 $dbServers = [
-    'dcccsapp.guo.local'   => '5432',
+    'db.ccs.local'   => '5432',
 ];
 
 $dbParams = [
@@ -60,7 +60,7 @@ $_CFG['tts'] =  [
 ];
 
 $_CFG['db'] = [
-    'servers' => ['dcccsapp.guo.local' => '5432'],
+    'servers' => ['db.ccs.local' => '5432'],
     'conn-params' => ['dbname' => 'ccs', 'user' => 'aster', 'password' => '12Fcnthbcr34',
     'connect_timeout' => '3'],
 ];
