@@ -4,7 +4,10 @@
 //declare(ticks = 1);
 
 use CCS\Logger;
+
 use CCS\WebsocketApiClient;
+use CCS\HttpApiClient;
+
 use CCS\db\MyDB;
 use CCS\a2i\Calld;
 use CCS\a2i\DBLogger;
@@ -36,7 +39,6 @@ spl_autoload_register(function ($class) {
 });
 
 require_once('Mail.php');
-require_once $myDir . '/vendor/autoload.php';
 require_once $myDir . '/_config.php';
 
 Logger::setLogTime(true);
@@ -118,6 +120,7 @@ $dblogger = new DBLogger($db, $_CFG['CALL_LOG_TABLE']);
 $trunkLocTable = $_CFG['TRUNK_LOCATION_TABLE'];
 $amiServers = $_CFG['AMI_SERVERS'];
 
+$apiUrl = $_CFG['api']['url'];
 $apiToken = $_CFG['api']['authtoken'];
 
 $apiAddress = $_CFG['api']['address'];
@@ -126,20 +129,21 @@ $apiUseSSL  = $_CFG['api']['ssl'];
 $apiConnTimeout  = $_CFG['api']['connect-timeout'];
 $apiReconnectInterval  = $_CFG['api']['reconnect-interval'];
 
-$apiClient = new WebsocketApiClient($apiAddress, $apiPort, $apiToken, $apiUseSSL, $apiConnTimeout);
-$apiClient->onClose(function () use ($apiClient, $apiReconnectInterval) {
+$wsApiClient = new WebsocketApiClient($apiAddress, $apiPort, $apiToken, $apiUseSSL, $apiConnTimeout);
+$httpApiClient = new HttpApiClient($apiUrl, $apiToken);
+
+$wsApiClient->onClose(function () use ($wsApiClient, $apiReconnectInterval) {
     Logger::log("API connection closed");
-    while (!$apiClient->isConnected()) {
+    while (!$wsApiClient->isConnected()) {
         Logger::log("Trying to reconnect API...");
-        $apiClient->connect();
+        $wsApiClient->connect();
         //@phan-suppress-next-line PhanUndeclaredClassMethod
         co::sleep($apiReconnectInterval);
     }
     Logger::log("API reconnect success!");
 });
 
-
-$callDaemon = new Calld($CAMPAIGN, $db, $dblogger, $_CFG, $apiClient);
+$callDaemon = new Calld($CAMPAIGN, $db, $dblogger, $_CFG, $wsApiClient, $httpApiClient);
 
 $sigHandler = function ($signo) use ($callDaemon) {
     switch ($signo) {
@@ -175,15 +179,15 @@ pcntl_signal(SIGQUIT, $sigHandler); // "User" shutdown signal, used to gracefull
 // Cannot set handler for SIGTERM
 //pcntl_signal(SIGTERM, 'childSignalHandler');
 
-$init = function() use($apiClient, $callDaemon) {
-    $ret = $apiClient->connect();
+$init = function() use($wsApiClient, $callDaemon) {
+    $ret = $wsApiClient->connect();
     if($ret->error()) {
         Logger::log("API connection failed: " . $ret->errorDesc());
         exit(0);
     }
     Logger::log("API connection success");
 
-    $ret = $apiClient->eventsSubscribe(['ALL']);
+    $ret = $wsApiClient->eventsSubscribe(['ALL']);
     if($ret->error()) {
         Logger::log("API events subscription failed: " . $ret->errorDesc());
     } else {
