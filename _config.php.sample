@@ -1,0 +1,80 @@
+<?php
+
+$dbServers = [
+    'db.ccs.local'   => '5432',
+];
+
+$dbParams = [
+    'dbname'          => 'ccs',
+    'user'            => 'aster',
+    'password'        => '12Fcnthbcr34',
+    'connect_timeout' => '3',
+];
+
+$amiServer = [
+    'host' => 'dclvccsast.guo.local',
+    'port' => '5038',
+];
+
+$amiServers = [
+    'dclvccsast.guo.local' => [
+        'port' => '5038',
+        'username' => 'a2i',
+        'password' => 'VtufByajhvth',
+    ],
+    'dcccsast.guo.local' => [
+        'port' => '5038',
+        'username' => 'a2i',
+        'password' => 'VtufByajhvth',
+    ],
+];
+
+$_CFG['EMAIL_FROM'] = 'a2i@regenergy.ru';
+$_CFG['EMAIL_HOST'] = 'dcexch.guo.local';
+$_CFG['EMAIL_PORT'] = 25;
+$_CFG['EMAIL_ADMIN'] = 'erofeev@regenergy.ru'; // ccs-a2id - where to send emails
+$_CFG['DB_SERVERS'] = $dbServers;
+$_CFG['DB_CONN_PARAMS']  = $dbParams;
+
+$_CFG['AMI_SERVERS'] = $amiServers;
+
+$_CFG['SMS_LOG_TABLE']  = 'a2i_sms_log';
+$_CFG['CALL_LOG_TABLE'] = 'a2i_call_log';
+$_CFG['TRUNK_LOCATION_TABLE'] = 'trunk_location';
+
+$_CFG['X_SEND_STATUS_CHECK_TRIES_MAX'] = 1440; // макс. кол-во проверок статуса сообщения
+$_CFG['X_SEND_TRIES_MAX'] = 10;                // макс. кол-во попыток отправки сообщения
+
+$_CFG['X_SEND_STATUS_CHECK_INTVL'] = 60;       // интервал (сек) между проверками статуса(перед увеличением счетчика)
+$_CFG['X_SEND_TRIES_INTVL'] = 1;              // интервал (сек) между попытками отправки сообщения (перед увеличением счетчика)
+
+// Настройки TTS
+$_CFG['tts'] =  [
+    'external-root' => '//dcvreg/cc__records/tts',
+    'internal-root' => '/recordings/tts',
+    'rec-dir-with-date' => true, // add date dirs to root, ex. /recordings/tts/2018/08/28
+    'lang' => 'ru-RU',
+    'voice' => 'zahar',
+    'speed' => '0.9',
+    'emotion' => 'evil',
+];
+
+$_CFG['db'] = [
+    'servers' => ['db.ccs.local' => '5432'],
+    'conn-params' => ['dbname' => 'ccs', 'user' => 'aster', 'password' => '12Fcnthbcr34',
+    'connect_timeout' => '3'],
+];
+
+$_CFG['api'] = [
+    'url' => 'http://127.0.0.1:9009/api/v1/',
+    'authtoken' => 'uyLH5PA0MngNyRaPQvr386SOSUiXU8',
+
+    'address' => '127.0.0.1',
+    'port' => '9009',
+    'ssl' => false,
+    'connect-timeout' => '2', // seconds
+    'reconnect-interval' => '10', // seconds
+    'ast-api-originate-context' => 'api-originate',
+];
+
+?>
